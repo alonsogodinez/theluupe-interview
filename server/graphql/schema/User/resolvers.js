@@ -6,6 +6,11 @@ function fullName(parent) {
   return null;
 }
 
+function totalPosts(parent, args, ctx) {
+  return ctx.prisma.post.count({ where: { authorId: parent.id } });
+}
+
 module.exports = {
   fullName,
+  totalPosts,
 };
