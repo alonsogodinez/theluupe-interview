@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "dev": "node ./server/index.js",
+    "dev": "nodemon ./server/index.js",
     "start": "node ./server/index.js",
     "postinstall": "prisma generate"
   },
