@@ -5,7 +5,7 @@ import { withApollo } from '@lib/apollo';
 import { GetPosts } from '@lib/gql/queries.gql';
 
 import { PublicLayout } from '@templates/Layout';
-import { PostsManager } from '@templates/PostsManeger';
+import { PostsManager } from '@templates/PostsManager';
 
 function Users() {
   const { data, loading } = useQuery(GetPosts);

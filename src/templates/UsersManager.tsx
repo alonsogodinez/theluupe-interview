@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import styled from '@emotion/styled';
 import { Button } from 'react-bootstrap';
 
-
 import { IUser } from '@dal/User';
 
 import { Table } from '@molecules/Table';

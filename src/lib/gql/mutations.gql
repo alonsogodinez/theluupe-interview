@@ -11,3 +11,9 @@ mutation CreateOnePost($data: PostCreateInput!) {
     ...PostInfo
   }
 }
+
+mutation DeleteOnePost($where: PostWhereUniqueInput!) {
+  deleteOnePost(where: $where) {
+    id
+  }
+}

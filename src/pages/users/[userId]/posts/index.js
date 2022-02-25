@@ -6,7 +6,7 @@ import { withApollo } from '@lib/apollo';
 import { GetUserPosts } from '@lib/gql/queries.gql';
 
 import { PublicLayout } from '@templates/Layout';
-import { PostsManager } from '@templates/PostsManeger';
+import { PostsManager } from '@templates/PostsManager';
 
 function UserPosts() {
   const router = useRouter();
