@@ -17,3 +17,9 @@ mutation DeleteOnePost($where: PostWhereUniqueInput!) {
     id
   }
 }
+
+mutation UpdateOnePost($data: PostUpdateInput!, $where: PostWhereUniqueInput!) {
+  updateOnePost(data: $data, where: $where) {
+    id
+  }
+}

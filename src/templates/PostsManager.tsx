@@ -7,6 +7,7 @@ import { IPost } from '@dal/Post';
 
 import { Table } from '@molecules/Table';
 import { AddPostModal } from '@organisms/AddPostModal';
+import { EditPostModal } from '@organisms/EditPostModal';
 import { DeleteModal } from '@organisms/DeleteModal';
 
 type IPostManagerProps = {
@@ -15,12 +16,22 @@ type IPostManagerProps = {
 
 export function PostsManager({ posts }: IPostManagerProps): JSX.Element {
   const [showCreatePostModal, setCreateShowPostModal] = useState(false);
+  const [showEditPostModal, setEditShowPostModal] = useState(false);
   const [showDeletePostModal, setShowDeletePostModal] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<IPost | null>(null);
+  const [selectedPost, setSelectedPost] = useState<Partial<IPost>>();
   const [deleteOnePost] = useMutation(DeleteOnePost);
 
-  const createPostModalOnOpenHandler = useCallback(() => setCreateShowPostModal(true), [setCreateShowPostModal]);
-  const createPostModalOnCloseHandler = useCallback(() => setCreateShowPostModal(false), [setCreateShowPostModal]);
+  const createPostModalOnOpenHandler = useCallback(() => setCreateShowPostModal(true), []);
+  const createPostModalOnCloseHandler = useCallback(() => setCreateShowPostModal(false), []);
+
+  const editPostModalOnOpenHandler = useCallback(
+    (post: IPost) => () => {
+      setSelectedPost(post);
+      setEditShowPostModal(true);
+    },
+    [],
+  );
+  const editPostModalOnCloseHandler = useCallback(() => setEditShowPostModal(false), []);
 
   const deletePostModalOnOpenHandler = useCallback(
     (post: IPost) => () => {
@@ -29,7 +40,6 @@ export function PostsManager({ posts }: IPostManagerProps): JSX.Element {
     },
     [],
   );
-
   const deletePostModalOnCloseHandler = useCallback(() => setShowDeletePostModal(false), [setShowDeletePostModal]);
 
   const handleDeletePost = useCallback(async () => {
@@ -52,7 +62,9 @@ export function PostsManager({ posts }: IPostManagerProps): JSX.Element {
       Header: 'Actions',
       Cell: ({row}) => (
         <ActionButtonsContainer>
-          <Button variant="secondary">Edit</Button>
+          <Button onClick={editPostModalOnOpenHandler(row.original)} variant="secondary">
+            Edit
+          </Button>
           <Button onClick={deletePostModalOnOpenHandler(row.original)}>Delete</Button>
         </ActionButtonsContainer>
       ),
@@ -67,7 +79,13 @@ export function PostsManager({ posts }: IPostManagerProps): JSX.Element {
 
       <Table data={posts} columns={columns} />
       <AddPostModal show={showCreatePostModal} onClose={createPostModalOnCloseHandler} />
-      <DeleteModal show={showDeletePostModal}  text={selectedPost?.title} onConfirm={handleDeletePost} onClose={deletePostModalOnCloseHandler} />
+      <EditPostModal show={showEditPostModal} onClose={editPostModalOnCloseHandler} initialValues={selectedPost} />
+      <DeleteModal
+        show={showDeletePostModal}
+        text={selectedPost?.title}
+        onConfirm={handleDeletePost}
+        onClose={deletePostModalOnCloseHandler}
+      />
     </>
   );
 }
