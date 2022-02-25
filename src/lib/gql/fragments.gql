@@ -4,4 +4,18 @@ fragment UserInfo on User {
   firstName
   lastName
   fullName
+  posts {
+    title
+  }
+  totalPosts
+}
+
+
+fragment PostInfo on Post {
+  id
+  title
+  content
+  author {
+    ...UserInfo
+  }
 }

@@ -15,6 +15,7 @@ type IUsersManagerProps = {
 const columns = [
   { Header: 'Email', accessor: 'email' },
   { Header: 'FullName', accessor: 'fullName' },
+  { Header: 'Total Posts', accessor: 'totalPosts' },
 ];
 
 export function UsersManager({ users }: IUsersManagerProps): JSX.Element {
@@ -31,17 +32,10 @@ export function UsersManager({ users }: IUsersManagerProps): JSX.Element {
 
       <Table data={users} columns={columns} />
 
-      <AddUserModal
-        show={showUserModal}
-        onClose={userModalOnCloseHandler}
-      />
+      <AddUserModal show={showUserModal} onClose={userModalOnCloseHandler} />
     </>
   );
 }
-
-UsersManager.defaultProps = {
-  users: undefined,
-};
 
 const CustomButton = styled(Button)`
   padding: 0;

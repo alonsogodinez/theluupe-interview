@@ -5,3 +5,15 @@ query GetUsers {
     ...UserInfo
   }
 }
+
+query GetPosts {
+  posts {
+    ...PostInfo
+  }
+}
+
+query GetUserPosts($authorId: String!) {
+  posts(where: { authorId: { equals: $authorId }}) {
+    ...PostInfo
+  }
+}
