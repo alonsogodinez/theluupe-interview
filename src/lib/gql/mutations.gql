@@ -5,3 +5,9 @@ mutation CreateOneUser($data: UserCreateInput!) {
     ...UserInfo
   }
 }
+
+mutation CreateOnePost($data: PostCreateInput!) {
+  createOnePost(data: $data) {
+    ...PostInfo
+  }
+}

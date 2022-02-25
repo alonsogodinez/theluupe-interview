@@ -3,69 +3,69 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/react-hooks';
 
-import { IUser } from '@dal/User';
-import { User as UserSchema } from '@shared/validation/schemas';
-import { CreateOneUser } from '@lib/gql/mutations.gql';
+import { IPost } from '@dal/Post';
+import { Post as PostSchema } from '@shared/validation/schemas';
+import { CreateOnePost } from '@lib/gql/mutations.gql';
 
 import { ColGroup, Form, Formik, Row } from '@atoms/Form';
 import { ModalHeader } from '@molecules/ModalHeader';
 import { SubmitButton } from '@molecules/forms/SubmitButton';
 import { TextField } from '@molecules/forms/TextField';
 
-export type IAddUserModalProps = {
+export type IAddPostModalProps = {
   show: boolean;
   onClose: () => void;
 };
 
-export function AddUserModal({
+export function AddPostModal({
   show,
   onClose,
-}: IAddUserModalProps): JSX.Element {
-  const [createOneUser] = useMutation(CreateOneUser);
+}: IAddPostModalProps): JSX.Element {
+  const [createOnePost] = useMutation(CreateOnePost);
   const initialValues = {};
 
   const handleSubmit = useCallback(
-    async (user: Partial<IUser>) => {
-      const createResults = await createOneUser({
+    async (post: Partial<IPost>) => {
+      const createResults = await createOnePost({
         variables: {
-          data: user,
+          data: {
+            ...post,
+            author: {
+              connect: {
+                id: 'ckyylvvf50007g4x9we7994b0',
+              },
+            },
+          },
         },
-        refetchQueries: ['GetUsers'],
+        refetchQueries: ['GetPosts', 'GetUserPosts'],
       });
-      onClose()
-      return createResults
+      onClose();
+      return createResults;
     },
-    [onClose, createOneUser],
+    [onClose, createOnePost],
   );
 
   return (
     <Modal show={show} centered onHide={onClose}>
-      <ModalHeader title={'Add a user'} onClose={onClose}/>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={UserSchema}>
+      <ModalHeader title={'Add a post'} onClose={onClose}/>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={PostSchema}>
         {({ isSubmitting }) => (
           <Form>
             <Modal.Body>
               <Row>
                 <ColGroup>
                   <TextField
-                    label="Email"
-                    name="email"
+                    label="Title"
+                    name="title"
                   />
                 </ColGroup>
               </Row>
               <Row>
                 <ColGroup>
                   <TextField
-                    label="First name"
-                    name="firstName"
-                  />
-                </ColGroup>
-              </Row>
-              <Row>
-                <ColGroup>
-                  <TextField
-                    label="Last name"
-                    name="lastName"
+                    multiline
+                    label="Content"
+                    name="content"
                   />
                 </ColGroup>
               </Row>
