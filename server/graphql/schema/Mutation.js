@@ -5,6 +5,7 @@ const Mutation = mutationType({
     t.crud.createOneUser();
     t.crud.createOnePost();
     t.crud.deleteOnePost();
+    t.crud.updateOnePost();
   },
 });
 
