@@ -10,7 +10,16 @@ const User = objectType({
     t.model.firstName();
     t.model.lastName();
     t.model.password();
-    t.model.posts();
+    t.nonNull.list.nonNull.field('posts', {
+      type: 'Post',
+      resolve: (parent, _, context) => {
+        return context.prisma.user
+          .findUnique({
+            where: { id: parent.id || undefined },
+          })
+          .posts()
+      },
+    })
     t.string('fullName', { resolve: fullName });
     t.int('totalPosts', { resolve: totalPosts });
   },
