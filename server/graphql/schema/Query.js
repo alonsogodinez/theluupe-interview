@@ -1,4 +1,4 @@
-const { queryType } = require('nexus');
+const { queryType, stringArg } = require('nexus');
 
 const Query = queryType({
   definition(t) {
@@ -19,6 +19,15 @@ const Query = queryType({
         }
       },
     })
+    t.list.field('userPosts', {
+      type: 'Post',
+      args: {
+        authorId: stringArg({ nullable: false }),
+      },
+      resolve(_root, args, context) {
+        return context.prisma.post.findMany({ where: { authorId: { equals: args.authorId } } });
+      },
+    });
   }
 });
 

@@ -13,8 +13,7 @@ function UserPosts() {
   const router = useRouter();
   const { userId } = router.query;
   const { data, loading } = useQuery(GetUserPosts, { variables: { authorId: userId } });
-  const posts = data?.posts || [];
-
+  const posts = data?.userPosts || [];
   return (
     <PublicLayout loading={loading}>
       <PostsManager posts={posts} />

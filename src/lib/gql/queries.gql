@@ -29,7 +29,7 @@ query GetPosts {
 }
 
 query GetUserPosts($authorId: String!) {
-  posts(where: { authorId: { equals: $authorId }}) {
+  userPosts(authorId: $authorId) {
     ...PostInfo
   }
 }

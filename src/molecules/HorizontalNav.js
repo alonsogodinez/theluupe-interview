@@ -65,6 +65,13 @@ export function HorizontalNav() {
               MAGAZINE
             </a>
           </Nav.Item>
+          {user && (
+            <Nav.Item className="mr-1">
+              <Link href={`/users/${user.id}/posts`}>
+                <a className="nav-link">My Posts</a>
+              </Link>
+            </Nav.Item>
+          )}
         </div>
         {!loading && (
           <>

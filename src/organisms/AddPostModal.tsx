@@ -41,7 +41,7 @@ export function AddPostModal({ show, onClose }: IAddPostModalProps): JSX.Element
       onClose();
       return createResults;
     },
-    [onClose, createOnePost],
+    [onClose, createOnePost, user],
   );
 
   return (

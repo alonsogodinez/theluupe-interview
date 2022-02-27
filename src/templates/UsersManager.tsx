@@ -6,6 +6,7 @@ import { IUser } from '@dal/User';
 
 import { Table } from '@molecules/Table';
 import { AddUserModal } from '@organisms/AddUserModal';
+import Link from 'next/link';
 
 type IUsersManagerProps = {
   users: IUser[];
@@ -14,7 +15,18 @@ type IUsersManagerProps = {
 const columns = [
   { Header: 'Email', accessor: 'email' },
   { Header: 'FullName', accessor: 'fullName' },
-  { Header: 'Total Posts', accessor: 'totalPosts' },
+  {
+    Header: 'Total Posts',
+    Cell: ({ row }) => {
+      if (row.original.totalPosts < 1) return <span>-</span>;
+
+      return (
+        <Link href={`/users/${row.original.id}/posts`}>
+          <a>{row.original.totalPosts}</a>
+        </Link>
+      );
+    },
+  },
 ];
 
 export function UsersManager({ users }: IUsersManagerProps): JSX.Element {

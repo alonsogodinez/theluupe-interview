@@ -51,7 +51,7 @@ export function PostsManager({ posts }: IPostManagerProps): JSX.Element {
           id: selectedPost?.id,
         },
       },
-      refetchQueries: ['GetPosts'],
+      refetchQueries: ['GetPosts', 'GetUserPosts'],
     });
     deletePostModalOnCloseHandler();
   }, [selectedPost, deleteOnePost, deletePostModalOnCloseHandler]);
