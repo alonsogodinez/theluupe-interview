@@ -10,7 +10,6 @@ fragment UserInfo on User {
   totalPosts
 }
 
-
 fragment PostInfo on Post {
   id
   title

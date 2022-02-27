@@ -17,10 +17,7 @@ export type IAddUserModalProps = {
   onClose: () => void;
 };
 
-export function AddUserModal({
-  show,
-  onClose,
-}: IAddUserModalProps): JSX.Element {
+export function AddUserModal({ show, onClose }: IAddUserModalProps): JSX.Element {
   const [createOneUser] = useMutation(CreateOneUser);
   const initialValues = {};
 
@@ -32,41 +29,32 @@ export function AddUserModal({
         },
         refetchQueries: ['GetUsers'],
       });
-      onClose()
-      return createResults
+      onClose();
+      return createResults;
     },
     [onClose, createOneUser],
   );
 
   return (
     <Modal show={show} centered onHide={onClose}>
-      <ModalHeader title={'Add a user'} onClose={onClose}/>
+      <ModalHeader title="Add a user" onClose={onClose} />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={UserSchema}>
         {({ isSubmitting }) => (
           <Form>
             <Modal.Body>
               <Row>
                 <ColGroup>
-                  <TextField
-                    label="Email"
-                    name="email"
-                  />
+                  <TextField label="Email" name="email" />
                 </ColGroup>
               </Row>
               <Row>
                 <ColGroup>
-                  <TextField
-                    label="First name"
-                    name="firstName"
-                  />
+                  <TextField label="First name" name="firstName" />
                 </ColGroup>
               </Row>
               <Row>
                 <ColGroup>
-                  <TextField
-                    label="Last name"
-                    name="lastName"
-                  />
+                  <TextField label="Last name" name="lastName" />
                 </ColGroup>
               </Row>
             </Modal.Body>

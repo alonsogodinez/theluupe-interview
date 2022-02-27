@@ -7,6 +7,7 @@ import { GetUserPosts } from '@lib/gql/queries.gql';
 
 import { PublicLayout } from '@templates/Layout';
 import { PostsManager } from '@templates/PostsManager';
+import { withAuthProvider } from "@molecules/AuthProvider";
 
 function UserPosts() {
   const router = useRouter();
@@ -22,4 +23,4 @@ function UserPosts() {
 }
 
 // eslint-disable-next-line import/no-default-export
-export default withApollo(UserPosts);
+export default withApollo(withAuthProvider(UserPosts));

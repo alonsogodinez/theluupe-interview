@@ -2,6 +2,7 @@ const { nexusPrisma } = require('nexus-plugin-prisma');
 const { makeSchema, declarativeWrappingPlugin } = require('nexus');
 const prisma = require('../lib/prisma');
 const types = require('./schema');
+const { getToken } = require('../utils')
 
 const schema = makeSchema({
   types,
@@ -12,10 +13,11 @@ const schema = makeSchema({
   },
 });
 
-const context = request => {
+const context = req => {
   return {
-    ...request,
+    ...req,
     prisma,
+    token: getToken(req)
   };
 };
 

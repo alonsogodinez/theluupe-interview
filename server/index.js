@@ -4,6 +4,9 @@ const { GraphQLServer } = require('graphql-yoga');
 const { MutationValidationErrorType, FieldValidationErrorType, yupMiddleware } = require('graphql-yup-middleware');
 const Graceful = require('node-graceful');
 const requestId = require('express-request-id');
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const { log } = require('../shared/lib/logger');
 const { schema, context } = require('./graphql');
@@ -32,6 +35,12 @@ Graceful.on('exit', async (signal, details) => {
   return Promise.all([prisma.$disconnect()]);
 });
 
+
+const corsOptions = {
+  origin: 'http://localhost:3000', // fow now
+  credentials: true
+};
+
 async function start() {
   try {
     await nextApp.prepare();
@@ -40,7 +49,9 @@ async function start() {
     gqlServer.express.disable('x-powered-by');
     gqlServer.express.enable('trust proxy');
     gqlServer.express.use(requestId());
-    // Add server-wide express middleware
+    gqlServer.express.use(cookieParser())
+    gqlServer.express.use(cors(corsOptions))
+    gqlServer.express.use(bodyParser.json());
     gqlServer.express.use(basePaths.auth, authRouter);
     // Add Next.js routes to GraphQL server base
     gqlServer.use(nextMiddleware(Object.values(basePaths)));

@@ -11,14 +11,15 @@ datasource db {
 model Post {
   id          String  @id @default(cuid())
   author      User    @relation(fields: [authorId], references: [id])
-  authorId      String 
-  title     String @default("")
-  content   String  @default("")
+  authorId    String
+  title       String  @default("")
+  content     String  @default("")
 }
 
 model User {
   id          String  @id @default(cuid())
   email       String  @unique
+  password    String  @default("")
   firstName   String?
   lastName    String?
   posts       Post[]

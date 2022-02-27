@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 import Nav from 'react-bootstrap/Nav';
-
+import fetch from 'isomorphic-unfetch';
 import Logo from '@assets/logos/theluupe.svg';
+import Button from 'react-bootstrap/Button';
+import { useApolloClient } from '@apollo/react-hooks';
+import { useAuthState } from '@molecules/AuthProvider';
+import { useRouter } from 'next/router';
+import { EditUserModal } from '@organisms/EditUserModal';
 
 export const HEADER_HEIGHT = '84px';
 
 export function HorizontalNav() {
-  const currentUser = {
-    isAuthenticated: false,
-  };
-  const { isAuthenticated } = currentUser;
+  const [showEditUserModal, setShowEditUserModal] = useState(false);
+  const { user, loading } = useAuthState();
+
+  const apolloClient = useApolloClient();
+  const router = useRouter();
+  const logOut = useCallback(async () => {
+    await fetch('/auth/logout', {
+      method: 'POST',
+    });
+    await Promise.all([apolloClient.reFetchObservableQueries(), router.push('/login')]);
+  }, [router, apolloClient]);
+
+  const openEditUserModal = useCallback(() => {
+    setShowEditUserModal(true);
+  }, []);
+
+  const closeEditUserModal = useCallback(() => {
+    setShowEditUserModal(false);
+  }, []);
 
   return (
     <header>
+      <EditUserModal show={showEditUserModal} onClose={closeEditUserModal} />
       <Wrapper className="py-2 px-4">
         <div className="d-flex align-items-center">
           <Nav.Item className="mr-4">
@@ -45,20 +66,29 @@ export function HorizontalNav() {
             </a>
           </Nav.Item>
         </div>
-        {/* {isAuthenticated && (
-          <Nav.Item>
-            <UserMenu currentUser={currentUser} />
-          </Nav.Item>
-        )} */}
-        {!isAuthenticated && (
-          <Nav.Item className="mr-1">
-            <a className="btn btn-secondary" href="/auth/login">
-              Log in
-            </a>
-            <a className="btn btn-primary text-white ml-3" href="/auth/signup">
-              Sign up
-            </a>
-          </Nav.Item>
+        {!loading && (
+          <>
+            {user ? (
+              <Nav.Item className="mr-1">
+                <span className="mr-3 text-capitalize font-weight-bold">{user.firstName}</span>
+                <Button className="mr-3" variant="primary" onClick={openEditUserModal}>
+                  Update Profile
+                </Button>
+                <Button variant="secondary" onClick={logOut}>
+                  Logout
+                </Button>
+              </Nav.Item>
+            ) : (
+              <Nav.Item className="mr-1">
+                <Link href="/login">
+                  <a className="btn btn-secondary">Log in</a>
+                </Link>
+                <Link href="/signup">
+                  <a className="btn btn-primary text-white ml-3"> Sign up</a>
+                </Link>
+              </Nav.Item>
+            )}
+          </>
         )}
       </Wrapper>
     </header>

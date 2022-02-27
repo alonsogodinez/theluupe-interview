@@ -9,16 +9,18 @@ import { Table } from '@molecules/Table';
 import { AddPostModal } from '@organisms/AddPostModal';
 import { EditPostModal } from '@organisms/EditPostModal';
 import { DeleteModal } from '@organisms/DeleteModal';
+import { useAuthState } from '@molecules/AuthProvider';
 
 type IPostManagerProps = {
   posts: IPost[];
 };
 
 export function PostsManager({ posts }: IPostManagerProps): JSX.Element {
+  const { user } = useAuthState();
   const [showCreatePostModal, setCreateShowPostModal] = useState(false);
   const [showEditPostModal, setEditShowPostModal] = useState(false);
   const [showDeletePostModal, setShowDeletePostModal] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<Partial<IPost>>();
+  const [selectedPost, setSelectedPost] = useState<Partial<IPost>>({});
   const [deleteOnePost] = useMutation(DeleteOnePost);
 
   const createPostModalOnOpenHandler = useCallback(() => setCreateShowPostModal(true), []);
@@ -60,14 +62,20 @@ export function PostsManager({ posts }: IPostManagerProps): JSX.Element {
     { Header: 'Author', accessor: 'author.fullName' },
     {
       Header: 'Actions',
-      Cell: ({row}) => (
-        <ActionButtonsContainer>
-          <Button onClick={editPostModalOnOpenHandler(row.original)} variant="secondary">
-            Edit
-          </Button>
-          <Button onClick={deletePostModalOnOpenHandler(row.original)}>Delete</Button>
-        </ActionButtonsContainer>
-      ),
+      Cell: ({ row }) => {
+        return user?.id === row.original.author.id ? (
+          <>
+            <Button className="mr-2" variant="outline-primary" onClick={editPostModalOnOpenHandler(row.original)}>
+              Edit
+            </Button>
+            <Button variant="outline-danger" onClick={deletePostModalOnOpenHandler(row.original)}>
+              Delete
+            </Button>
+          </>
+        ) : (
+          <span> - </span>
+        );
+      },
     },
   ];
 
@@ -81,6 +89,7 @@ export function PostsManager({ posts }: IPostManagerProps): JSX.Element {
       <AddPostModal show={showCreatePostModal} onClose={createPostModalOnCloseHandler} />
       <EditPostModal show={showEditPostModal} onClose={editPostModalOnCloseHandler} initialValues={selectedPost} />
       <DeleteModal
+        isLoading={false}
         show={showDeletePostModal}
         text={selectedPost?.title}
         onConfirm={handleDeletePost}

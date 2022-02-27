@@ -6,6 +6,7 @@ import { GetUsers } from '@lib/gql/queries.gql';
 
 import { PublicLayout } from '@templates/Layout';
 import { UsersManager } from '@templates/UsersManager';
+import { withAuthProvider } from "@molecules/AuthProvider";
 
 function Users() {
   const { data, loading } = useQuery(GetUsers);
@@ -19,4 +20,4 @@ function Users() {
 }
 
 // eslint-disable-next-line import/no-default-export
-export default withApollo(Users);
+export default withApollo(withAuthProvider(Users));

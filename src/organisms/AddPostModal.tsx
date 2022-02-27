@@ -11,16 +11,15 @@ import { ColGroup, Form, Formik, Row } from '@atoms/Form';
 import { ModalHeader } from '@molecules/ModalHeader';
 import { SubmitButton } from '@molecules/forms/SubmitButton';
 import { TextField } from '@molecules/forms/TextField';
+import { useAuthState } from '@molecules/AuthProvider';
 
 export type IAddPostModalProps = {
   show: boolean;
   onClose: () => void;
 };
 
-export function AddPostModal({
-  show,
-  onClose,
-}: IAddPostModalProps): JSX.Element {
+export function AddPostModal({ show, onClose }: IAddPostModalProps): JSX.Element {
+  const { user } = useAuthState();
   const [createOnePost] = useMutation(CreateOnePost);
   const initialValues = {};
 
@@ -32,7 +31,7 @@ export function AddPostModal({
             ...post,
             author: {
               connect: {
-                id: 'ckyylvvf50007g4x9we7994b0',
+                id: user?.id,
               },
             },
           },
@@ -47,26 +46,19 @@ export function AddPostModal({
 
   return (
     <Modal show={show} centered onHide={onClose}>
-      <ModalHeader title={'Add a post'} onClose={onClose}/>
+      <ModalHeader title="Add a post" onClose={onClose} />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={PostSchema}>
         {({ isSubmitting }) => (
           <Form>
             <Modal.Body>
               <Row>
                 <ColGroup>
-                  <TextField
-                    label="Title"
-                    name="title"
-                  />
+                  <TextField label="Title" name="title" />
                 </ColGroup>
               </Row>
               <Row>
                 <ColGroup>
-                  <TextField
-                    multiline
-                    label="Content"
-                    name="content"
-                  />
+                  <TextField multiline label="Content" name="content" />
                 </ColGroup>
               </Row>
             </Modal.Body>

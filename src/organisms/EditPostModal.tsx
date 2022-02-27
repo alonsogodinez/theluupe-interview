@@ -15,14 +15,10 @@ import { TextField } from '@molecules/forms/TextField';
 export type IEditPostModalProps = {
   show: boolean;
   onClose: () => void;
-  initialValues?: Partial<IPost>;
+  initialValues: Partial<IPost>;
 };
 
-export function EditPostModal({
-  show,
-  initialValues,
-  onClose,
-}: IEditPostModalProps): JSX.Element {
+export function EditPostModal({ show, initialValues, onClose }: IEditPostModalProps): JSX.Element {
   const [updateOnePost] = useMutation(UpdateOnePost);
 
   const handleSubmit = useCallback(
@@ -51,32 +47,25 @@ export function EditPostModal({
 
   return (
     <Modal show={show} centered onHide={onClose}>
-      <ModalHeader title={'Edit a post'} onClose={onClose}/>
+      <ModalHeader title="Edit a post" onClose={onClose} />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={PostSchema}>
         {({ isSubmitting }) => (
           <Form>
             <Modal.Body>
               <Row>
                 <ColGroup>
-                  <TextField
-                    label="Title"
-                    name="title"
-                  />
+                  <TextField label="Title" name="title" />
                 </ColGroup>
               </Row>
               <Row>
                 <ColGroup>
-                  <TextField
-                    multiline
-                    label="Content"
-                    name="content"
-                  />
+                  <TextField multiline label="Content" name="content" />
                 </ColGroup>
               </Row>
             </Modal.Body>
             <Modal.Footer>
               <SubmitButton>Edit</SubmitButton>
-              <Button disabled={isSubmitting} variant="secondary" onClick={onClose}>
+              <Button className="mt-3" disabled={isSubmitting} variant="secondary" onClick={onClose}>
                 Cancel
               </Button>
             </Modal.Footer>

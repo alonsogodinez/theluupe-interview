@@ -1,8 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import { withApollo } from '@lib/apollo';
-import { PublicLayout } from '@templates/Layout';
-import { Heading } from '@atoms/Heading';
+import { withApollo } from "@lib/apollo";
+import { PublicLayout } from "@templates/Layout";
+import { Heading } from "@atoms/Heading";
+import { withAuthProvider } from "@molecules/AuthProvider";
 
 function Index() {
   return (
@@ -89,4 +90,4 @@ function Index() {
 }
 
 // eslint-disable-next-line import/no-default-export
-export default withApollo(Index);
+export default withApollo(withAuthProvider(Index));

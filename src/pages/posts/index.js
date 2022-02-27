@@ -6,6 +6,7 @@ import { GetPosts } from '@lib/gql/queries.gql';
 
 import { PublicLayout } from '@templates/Layout';
 import { PostsManager } from '@templates/PostsManager';
+import { withAuthProvider } from "@molecules/AuthProvider";
 
 function Users() {
   const { data, loading } = useQuery(GetPosts);
@@ -19,4 +20,4 @@ function Users() {
 }
 
 // eslint-disable-next-line import/no-default-export
-export default withApollo(Users);
+export default withApollo(withAuthProvider(Users));
